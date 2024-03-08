@@ -1,17 +1,22 @@
-import { Header } from "@/components/header";
-import { Alert, ScrollView, Text, View } from "react-native";
-import { ProductCartProps, useCartStore } from "@/stores/cart-store";
-import { Product } from "@/components/product";
-import { formatCurrency } from "@/utils/functions/formatCurrency";
-import { Input } from "@/components/input";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { Alert, Linking, ScrollView, Text, View } from "react-native";
 import { Button } from "@/components/button";
 import { Feather } from "@expo/vector-icons";
+import { Header } from "@/components/header";
+import { Input } from "@/components/input";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { LinkButton } from "@/components/link-button";
-import { ProductProps } from "@/utils/data/products";
+import { Product } from "@/components/product";
+import { ProductCartProps, useCartStore } from "@/stores/cart-store";
+import { formatCurrency } from "@/utils/functions/formatCurrency";
+import { useState } from "react";
+import { useNavigation } from "expo-router";
+
+const PHONE_NUMBER = "5586988641961";
 
 export default function Cart() {
+  const [address, setAddress] = useState("");
   const cartStore = useCartStore();
+  const navigation = useNavigation();
 
   const total = formatCurrency(
     cartStore.products.reduce(
@@ -27,6 +32,24 @@ export default function Cart() {
       },
       { text: "Remover", onPress: () => cartStore.remove(product.id) },
     ]);
+  };
+
+  const handleOrder = () => {
+    if (address.trim().length === 0) {
+      return Alert.alert("Pedido", "Informe os dados da entrega.");
+    }
+
+    const products = cartStore.products
+      .map((product) => `\n ${product.quantity} ${product.title}`)
+      .join("");
+
+    const message = `🍔 *NOVO PEDIDO!* \n${products} \n\n *Entregar em:* ${address} \n\n *Valor total:* ${total}`;
+
+    Linking.openURL(
+      `https://api.whatsapp.com/send?phone=${PHONE_NUMBER}&text=${message}`
+    );
+    cartStore.clear();
+    navigation.goBack();
   };
 
   return (
@@ -56,12 +79,18 @@ export default function Cart() {
                 {total}
               </Text>
             </View>
-            <Input placeholder="Informe o endereço de entrega com rua, bairro, CEP, número e complemento..." />
+            <Input
+              placeholder="Informe o endereço de entrega com rua, bairro, CEP, número e complemento..."
+              onChangeText={setAddress}
+              onSubmitEditing={handleOrder}
+              blurOnSubmit={true}
+              returnKeyType="next"
+            />
           </View>
         </ScrollView>
       </KeyboardAwareScrollView>
       <View className="p-5 gap-5">
-        <Button>
+        <Button onPress={handleOrder}>
           <Button.Text>Enviar pedido</Button.Text>
           <Button.Icon>
             <Feather name="arrow-right-circle" size={20} />
