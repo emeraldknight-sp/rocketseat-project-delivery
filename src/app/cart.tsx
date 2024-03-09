@@ -11,12 +11,11 @@ import { formatCurrency } from "@/utils/functions/formatCurrency";
 import { useState } from "react";
 import { useNavigation } from "expo-router";
 
-const PHONE_NUMBER = "5586988641961";
-
 export default function Cart() {
   const [address, setAddress] = useState("");
   const cartStore = useCartStore();
   const navigation = useNavigation();
+  const phone = process.env.EXPO_PUBLIC_PHONE_NUMBER;
 
   const total = formatCurrency(
     cartStore.products.reduce(
@@ -46,7 +45,7 @@ export default function Cart() {
     const message = `🍔 *NOVO PEDIDO!* \n${products} \n\n *Entregar em:* ${address} \n\n *Valor total:* ${total}`;
 
     Linking.openURL(
-      `https://api.whatsapp.com/send?phone=${PHONE_NUMBER}&text=${message}`
+      `https://api.whatsapp.com/send?phone=${phone}&text=${message}`
     );
     cartStore.clear();
     navigation.goBack();
