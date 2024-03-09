@@ -5,15 +5,15 @@ import { Header } from "@/components/header";
 import { Input } from "@/components/input";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { LinkButton } from "@/components/link-button";
+import { PHONE_NUMBER } from "@env";
 import { Product } from "@/components/product";
 import { ProductCartProps, useCartStore } from "@/stores/cart-store";
 import { formatCurrency } from "@/utils/functions/formatCurrency";
-import { useState } from "react";
 import { useNavigation } from "expo-router";
-
-const PHONE_NUMBER = "5586988641961";
+import { useState } from "react";
 
 export default function Cart() {
+  const phoneNumber = PHONE_NUMBER;
   const [address, setAddress] = useState("");
   const cartStore = useCartStore();
   const navigation = useNavigation();
@@ -46,7 +46,7 @@ export default function Cart() {
     const message = `🍔 *NOVO PEDIDO!* \n${products} \n\n *Entregar em:* ${address} \n\n *Valor total:* ${total}`;
 
     Linking.openURL(
-      `https://api.whatsapp.com/send?phone=${PHONE_NUMBER}&text=${message}`
+      `https://api.whatsapp.com/send?phone=${phoneNumber}&text=${message}`
     );
     cartStore.clear();
     navigation.goBack();

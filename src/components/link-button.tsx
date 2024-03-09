@@ -1,8 +1,5 @@
-import { Link, LinkProps } from "expo-router";
-
-interface LinkButtonProps extends LinkProps<string> {
-  title: string;
-}
+import { LinkButtonProps } from "@/@types";
+import { Link } from "expo-router";
 
 export function LinkButton({ title, ...rest }: LinkButtonProps) {
   return (

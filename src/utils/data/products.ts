@@ -135,6 +135,6 @@ const PRODUCTS = MENU.map((item) => item.data).flat();
 
 const CATEGORIES = MENU.map((item) => item.title);
 
-type ProductProps = (typeof PRODUCTS)[0];
+// type ProductProps = (typeof PRODUCTS)[0];
 
-export { MENU, PRODUCTS, CATEGORIES, ProductProps };
+export { MENU, PRODUCTS, CATEGORIES };

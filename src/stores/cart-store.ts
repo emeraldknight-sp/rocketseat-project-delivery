@@ -1,19 +1,8 @@
 import * as cartInMemory from "./helpers/cart-in-memory";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { ProductProps } from "@/utils/data/products";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
-
-export interface ProductCartProps extends ProductProps {
-  quantity: number;
-}
-
-interface StateProps {
-  products: ProductCartProps[];
-  add: (product: ProductProps) => void;
-  remove: (productId: string) => void;
-  clear: () => void;
-}
+import { ProductProps, StateProps } from "@/@types";
 
 export const useCartStore = create(
   persist<StateProps>(

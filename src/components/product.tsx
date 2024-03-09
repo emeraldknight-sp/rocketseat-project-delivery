@@ -1,23 +1,11 @@
+import { ProductProps } from "@/@types";
 import { forwardRef } from "react";
 import {
   Image,
-  ImageProps,
   Text,
   TouchableOpacity,
-  TouchableOpacityProps,
   View,
 } from "react-native";
-
-interface ProductDataProps {
-  title: string;
-  description: string;
-  thumbnail: ImageProps;
-  quantity?: number;
-}
-
-interface ProductProps extends TouchableOpacityProps {
-  data: ProductDataProps;
-}
 
 export const Product = forwardRef<TouchableOpacity, ProductProps>(
   ({ data, ...rest }, ref) => {
